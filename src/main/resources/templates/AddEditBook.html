@@ -3,9 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <title>LibraryBook</title>
-
-
 </head>
+<link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
+<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
+      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+<body>
+
 <input type="checkbox" id="nav-toggle">
 <div class="sidebar">
     <div class="sidebar-brand">
@@ -35,22 +38,77 @@
     </header>
     <main>
 
+        <div class="recent-grid">
+            <div class="project">
+                <div class="card">
+                    <div class="card-header">
+                        <h3>Thêm Mới sách</h3>
+                    </div>
+                    <div class="card-body col-md-12" >
+                        <form method="post" th:action="@{/book/save}" th:object="${book}"  enctype="multipart/form-data">
+                            <div class="row">
+                                <div class="col-md-6">
+                                        <div class="form-group row">
+                                            <label for="title" class="col-sm-2 col-form-label">Tiêu đề</label>
+                                            <div class="col">
+                                                <input id="title" type="text" required th:field="${book.title}" class="form-control" >
+                                            </div>
+                                        </div>
 
+                                        <div class="form-group row">
+                                            <label for="author" class="col-sm-2 col-form-label">Tác giả</label>
+                                            <div class="col">
+                                                <input id="author" type="text" required th:field="${book.author}" class="form-control" >
+                                            </div>
+                                        </div>
+                                    <div class="form-group row">
+                                        <label for="description" class="col-sm-2 col-form-label">Mô tả</label>
+                                        <div class="col">
+                                            <textarea id="description" required th:field="${book.description}"rows="20" cols="80" ></textarea>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="releasedate" class="col-sm-2 col-form-label">Ngày phát hành</label>
+                                        <div class="col">
+                                            <input id="releasedate" type="date" required th:field="${book.releaseDate}" class="form-control" >
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="numberpage" class="col-sm-2 col-form-label">Số trang</label>
+                                        <div class="col">
+                                            <input id="numberpage" type="number" required th:field="${book.numberPage}" class="form-control" >
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <label for="type" class="col-sm-2 col-form-label">Thể loại</label>
+                                        <div class="col">
+                                            <select required th:field="${book.bookType}" id="type">
+                                                <option th:each="cate : ${listCate}"
+                                                        th:value="${cate.id}"
+                                                        th:utext="${cate.Name}"/>
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group mb-2">
+                                        <input type="file" name="fileData" accept="image/*" class="form-control-file">
+                                        <img th:src="@{'/image/' + ${book.image}}" width="120px" height="auto" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <button class="btn btn-primary" type="submit">Thêm mới</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+        </div>
     </main>
 </div>
-<!--<form method="post" th:action="@{/upload}" enctype="multipart/form-data">-->
-<!--    <div class="form-group">-->
-<!--        <input type="file" name="image" accept="image/*" class="form-control-file">-->
-<!--    </div>-->
-<!--    <button type="submit" class="btn btn-primary">Upload image</button>-->
-<!--</form>-->
-<!--<span th:if="${msg != null}" th:text="${msg}"></span>-->
-
-<link rel="stylesheet" type="text/css" th:href="@{/style.css}"/>
-<link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet"
-      integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
-<body>
-
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="

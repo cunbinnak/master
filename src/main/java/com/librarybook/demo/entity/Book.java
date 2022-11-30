@@ -17,10 +17,12 @@ public class Book {
     private int id;
     private String title;
     private String author;
+    private String description;
     private String bookType;
     private String releaseDate;
     private String numberPage;
     private String image;
+    private String path;
 
     @ManyToOne
     @JoinColumn(name = "category_id")
