@@ -48,8 +48,7 @@ public class LoginController {
             model.addAttribute("mess",mess);
             return"redirect:/login";
         }
-        HttpSession session =req.getSession();
-        model.addAttribute("user", user);
+        model.addAttribute("userName", user.getName());
         return"index";
     }
 }
