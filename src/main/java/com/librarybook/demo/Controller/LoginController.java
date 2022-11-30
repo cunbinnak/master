@@ -11,6 +11,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+
 @Controller
 @RequestMapping("/login")
 public class LoginController {
@@ -24,7 +28,7 @@ public class LoginController {
     }
     @PostMapping("/save")
     public String SaveRegistor(Model model, @ModelAttribute("user") User user, @Param("password")String password) {
-        User checkUser = userRepo.findByUserName(user.getName());
+        User checkUser = userRepo.findByName(user.getName());
         if(checkUser==null) {
             user.setPassword(password);
             userRepo.save(user);
@@ -37,12 +41,15 @@ public class LoginController {
         return"redirect:/login";
     }
     @GetMapping("/login")
-    public String Login(Model model,@ModelAttribute("userName") String userName, @Param("password")String password) {
-        User user = new User();
+    public String Login(Model model, @ModelAttribute("userName") String userName, @Param("password")String password, HttpServletRequest req, HttpServletResponse resp) {
+        User user = userRepo.findUserByNameAndPassword(userName,password);
+        if(user == null){
+            String mess="tai khoan mat khau khong chinh xac";
+            model.addAttribute("mess",mess);
+            return"redirect:/login";
+        }
+        HttpSession session =req.getSession();
         model.addAttribute("user", user);
-        return"login";
+        return"index";
     }
-
-
-
 }

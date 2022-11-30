@@ -2,16 +2,14 @@ package com.librarybook.demo.entity;
 
 import lombok.*;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Getter
 @Setter
+@Entity
 @Table(name = "user")
 public class User {
     @Id
