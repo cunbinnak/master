@@ -18,6 +18,8 @@ public class Book {
     private String bookType;
     private String releaseDate;
     private String numberPage;
+    private String image;
+
     @ManyToOne
     @JoinColumn(name = "category_id")
     @EqualsAndHashCode.Exclude
