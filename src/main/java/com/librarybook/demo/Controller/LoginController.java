@@ -37,10 +37,12 @@ public class LoginController {
         return"redirect:/login";
     }
     @GetMapping("/login")
-    public String Login(Model model) {
+    public String Login(Model model,@ModelAttribute("userName") String userName, @Param("password")String password) {
         User user = new User();
         model.addAttribute("user", user);
         return"login";
     }
+
+
 
 }
