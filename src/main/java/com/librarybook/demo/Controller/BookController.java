@@ -66,5 +66,4 @@ public class BookController {
         mv.addObject("book",book);
         return mv;
     }
-
 }
