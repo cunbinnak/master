@@ -60,11 +60,12 @@
                                 <tr th:each ="book : ${listBook}">
                                     <td th:utext="${book.title}"></td>
                                     <td th:utext="${book.author}"></td>
-                                    <td th:utext="${book.bookType}"></td>
                                     <td th:utext="${book.releaseDate}"></td>
+                                    <td th:utext="${book.numberPage}"></td>
                                     <td>
-                                        <a style="margin-right: 6px" th:href="@{/book/editBook/{id}(id=${book.id})}" th:if="true"><button class="btn btn-success"   >Sửa</button></a>
-                                        <a th:if="true"><button class="btn btn-danger">Xóa</button></a>
+                                        <a style="margin-right: 6px" th:href="@{/book/viewBook/{id}(id=${book.id})}" th:if="true"><button class="btn btn-success"   >Xem</button></a>
+                                        <a style="margin-right: 6px" th:href="@{/book/initeditBook/{id}(id=${book.id})}" th:if="true"><button class="btn btn-success"   >Sửa</button></a>
+                                        <a th:href="@{/book/delete/{id}(id=${book.id})}"><button class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button></a>
                                     </td>
                                 </tr>
                                 </tbody>

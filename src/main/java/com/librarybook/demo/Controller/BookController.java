@@ -6,21 +6,17 @@ import com.librarybook.demo.entity.Category;
 import com.librarybook.demo.repository.BookRepo;
 import com.librarybook.demo.repository.CateRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import javax.servlet.http.HttpServletRequest;
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardOpenOption;
+
 import java.util.List;
 
 @Controller
@@ -43,42 +39,77 @@ public class BookController {
         return "index";
     }
     @PostMapping("/save")
-    public String saveUser(@ModelAttribute("book") Book book, @RequestParam ("fileData") MultipartFile fileData) throws IOException {
+    public String saveBook(@ModelAttribute("book") Book book, @RequestParam ("fileData") MultipartFile fileData) throws IOException {
 
-        Path currentPath = Paths.get(".");
-        Path absolutePath = currentPath.toAbsolutePath();
-        book.setPath(absolutePath +"/src/main/resources/static/images/");
-        byte [] bytes = fileData.getBytes();
-        Path fileNameAndPath = Paths.get(book.getPath() +fileData.getOriginalFilename());
-        Files.write(fileNameAndPath, fileData.getBytes());
+        if (!fileData.getOriginalFilename().isEmpty()){
+            Path currentPath = Paths.get(".");
+            Path absolutePath = currentPath.toAbsolutePath();
+            book.setPath(absolutePath +"/src/main/resources/static/images/");
+            byte [] bytes = fileData.getBytes();
+            Path fileNameAndPath = Paths.get(book.getPath() +fileData.getOriginalFilename());
+            Files.write(fileNameAndPath, fileData.getBytes());
 
-        book.setImage(fileData.getOriginalFilename());
+            book.setImage(fileData.getOriginalFilename());
+        }
+
         bookRepo.save(book);
         return "redirect:/book/index";
     }
     @RequestMapping("/initaddbook")
-    public String addUser(Model model){
+    public String addBook(Model model){
         Book book = new Book();
         List<Category> listCate = cateRepo.findAll();
         model.addAttribute("book",book);
         model.addAttribute("listCate", listCate);
-        return "AddEditBook";
+        return "AddBook";
     }
-    @GetMapping("/delete/{id}")
-    public String deleteByidUser(@PathVariable("id") int id){
-        bookRepo.deleteById(id);
-        return "redirect:index";
-    }
-    @GetMapping("/editBook/{id}")
-    public ModelAndView EditByidUser(@PathVariable("id") int id){
-        ModelAndView mv = new ModelAndView("AddEditBook");
+
+    @GetMapping("/initeditBook/{id}")
+    public ModelAndView initEditBook(@PathVariable("id") int id, Model editbook){
+        ModelAndView mv = new ModelAndView("EditBook");
         Book book= bookRepo.findById(id);
-        mv.addObject("book",book);
+        mv.addObject("editbook",book);
         List<Category> listCate = cateRepo.findAll();
+        editbook.addAttribute("listCate", listCate);
         return mv;
     }
 
-    @GetMapping("/image") public String displayUploadForm() {
-        return "AddEditBook";
+    @PostMapping("/edit")
+    public String editBook(@ModelAttribute("editbook") Book editbook, @RequestParam ("fileData") MultipartFile fileData) throws IOException {
+        System.out.println(fileData.getOriginalFilename());
+        if (!fileData.getOriginalFilename().isEmpty()){
+            Path currentPath = Paths.get(".");
+            Path absolutePath = currentPath.toAbsolutePath();
+            editbook.setPath(absolutePath +"/src/main/resources/static/images/");
+            byte [] bytes = fileData.getBytes();
+            Path fileNameAndPath = Paths.get(editbook.getPath() +fileData.getOriginalFilename());
+            Files.write(fileNameAndPath, fileData.getBytes());
+
+            editbook.setImage(fileData.getOriginalFilename());
+        }else{
+            Book oldBook = bookRepo.findById(editbook.getId());
+
+            String oldImage = oldBook.getImage();
+            editbook.setImage(oldImage);
+        }
+
+        bookRepo.save(editbook);
+        return "redirect:/book/index";
+    }
+
+    @GetMapping("/viewBook/{id}")
+    public ModelAndView viewBook(@PathVariable("id") int id, Model viewBook){
+        ModelAndView mv = new ModelAndView("viewBook");
+        Book book= bookRepo.findById(id);
+        mv.addObject("viewbook",book);
+        List<Category> listCate = cateRepo.findAll();
+        viewBook.addAttribute("listCate", listCate);
+        return mv;
+    }
+
+    @GetMapping("/delete/{id}")
+    public String deleteByidUser(@PathVariable("id") int id){
+        bookRepo.deleteById(id);
+        return "redirect:/book/index";
     }
 }
