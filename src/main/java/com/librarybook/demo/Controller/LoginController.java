@@ -3,16 +3,11 @@ package com.librarybook.demo.Controller;
 import com.librarybook.demo.entity.User;
 import com.librarybook.demo.repository.UserRepo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.repository.query.Param;
+
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 @Controller
@@ -24,31 +19,37 @@ public class LoginController {
     public String Registor(Model model) {
         User user = new User();
         model.addAttribute("user", user);
-        return"register";
+        return"Register";
     }
     @PostMapping("/save")
-    public String SaveRegistor(Model model, @ModelAttribute("user") User user, @Param("password")String password) {
+    public String SaveRegistor(Model model, @ModelAttribute("user") User user) {
         User checkUser = userRepo.findByName(user.getName());
         if(checkUser==null) {
-            user.setPassword(password);
+            user.setPassword(user.getPassword());
             userRepo.save(user);
         }
         else {
-            String mess="tai khoan da ton tai";
+            String mess="Tài khoản đã tồn tại";
             model.addAttribute("mess",mess);
-            return"redirect:/register";
+            return"Register";
         }
-        return"redirect:/login";
+        return"redirect:/login/dangnhap";
     }
-    @GetMapping("/login")
-    public String Login(Model model, @ModelAttribute("userName") String userName, @Param("password")String password, HttpServletRequest req, HttpServletResponse resp) {
+
+    @GetMapping("/dangnhap")
+    public String initLogin(Model user){
+        return "Login";
+    }
+
+    @PostMapping("/dang-nhap")
+    public String Login(Model model, @RequestParam("userName") String userName, @RequestParam("password") String password, HttpSession session) {
         User user = userRepo.findUserByNameAndPassword(userName,password);
         if(user == null){
-            String mess="tai khoan mat khau khong chinh xac";
+            String mess="Tài khoản hoặc mật khẩu không chính xác";
             model.addAttribute("mess",mess);
-            return"redirect:/login";
+            return"Login";
         }
-        model.addAttribute("userName", user.getName());
-        return"index";
+        session.setAttribute("userName", user.getName());
+        return"redirect:/book/index";
     }
 }
