@@ -47,7 +47,7 @@ public class BookController {
 
         Path currentPath = Paths.get(".");
         Path absolutePath = currentPath.toAbsolutePath();
-        book.setPath(absolutePath +"/src/main/resources/image/");
+        book.setPath(absolutePath +"/src/main/resources/static/images/");
         byte [] bytes = fileData.getBytes();
         Path fileNameAndPath = Paths.get(book.getPath() +fileData.getOriginalFilename());
         Files.write(fileNameAndPath, fileData.getBytes());

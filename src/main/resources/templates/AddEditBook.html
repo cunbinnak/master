@@ -83,6 +83,7 @@
                                         <label for="type" class="col-sm-2 col-form-label">Thể loại</label>
                                         <div class="col">
                                             <select required th:field="${book.bookType}" id="type">
+                                                <option th:value="${book.bookType}" th:text="${book.bookType}"></option>
                                                 <option th:each="cate : ${listCate}"
                                                         th:value="${cate.id}"
                                                         th:utext="${cate.Name}"/>
@@ -91,9 +92,9 @@
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div class="form-group mb-2">
-                                        <input type="file" name="fileData" accept="image/*" class="form-control-file">
-                                        <img th:src="@{'/image/' + ${book.image}}" width="120px" height="auto" />
+                                    <div class="form-group mb-2" style="padding: 30px">
+                                        <input type="file" name="fileData" accept="image/*" class="form-control-file" style="margin-bottom: 10px">
+                                        <img th:src="@{'/images/' + ${book.image}}" width="100%" height="auto" />
                                     </div>
                                 </div>
                             </div>
