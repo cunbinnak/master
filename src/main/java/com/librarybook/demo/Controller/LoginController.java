@@ -49,7 +49,15 @@ public class LoginController {
             model.addAttribute("mess",mess);
             return"Login";
         }
-        session.setAttribute("userName", user.getName());
+
+        session.setAttribute("userName", userName);
         return"redirect:/book/index";
+    }
+
+    @GetMapping("/dangxuat")
+    public String initLogin(Model model, HttpSession session){
+        session.removeAttribute("userName");
+        model.addAttribute("checkUser","false");
+        return "redirect:/book/index";
     }
 }

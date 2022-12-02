@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -33,9 +34,11 @@ public class BookController {
     public static String UPLOAD_DIRECTORY = System.getProperty("user.dir") + "/src/main/resources/image";
 
     @RequestMapping(value = { "/", "/index" }, method = RequestMethod.GET)
-    public String index(Model model) {
+    public String index(Model model, HttpSession session) {
         List<Book> books=bookService.getAll();
         model.addAttribute("listBook",books);
+        model.addAttribute("userName", session.getAttribute("userName"));
+        System.out.println(session.getAttribute("userName"));
         return "index";
     }
     @PostMapping("/save")

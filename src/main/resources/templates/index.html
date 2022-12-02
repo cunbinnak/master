@@ -25,14 +25,22 @@
 </div>
 <div class="maincontent">
     <header>
-        <div class="wrapuser">
-            <img src="../../../assets/images/person_1.jpg" width="30px" height="30px" alt="">
-            <div>
-                <h4>{{username}}</h4>
-                <small>{{roles}}</small>
-            </div>
-            <div class="sigout" *ngIf="username">
-                <p (click)="signout();">Sign Out</p>
+        <div class="col-md-12">
+            <div class="row">
+                <div class="col-md-6"></div>
+                <div class="col-md-2"></div>
+                <div class="wrapuser col-md-4" style="display: inline">
+                    <div th:if="${#session.getAttribute('userName')}">
+                        <p>HI: </p><h4  th:text="${#session.getAttribute('userName')}"></h4>
+                    </div>
+                    <div th:if="${#session.getAttribute('userName')==null}">
+                        <a  th:href="@{/login/dangnhap}">Đăng nhập</a>
+                    </div>
+                    <div th:if="${#session.getAttribute('userName')!=null}">
+                        <a  th:href="@{/login/dangxuat}">Đăng xuất</a>
+                    </div>
+
+                </div>
             </div>
         </div>
     </header>
@@ -63,14 +71,18 @@
                                     <td th:utext="${book.releaseDate}"></td>
                                     <td th:utext="${book.numberPage}"></td>
                                     <td>
-                                        <a style="margin-right: 6px" th:href="@{/book/viewBook/{id}(id=${book.id})}" th:if="true"><button class="btn btn-success"   >Xem</button></a>
-                                        <a style="margin-right: 6px" th:href="@{/book/initeditBook/{id}(id=${book.id})}" th:if="true"><button class="btn btn-success"   >Sửa</button></a>
-                                        <a th:href="@{/book/delete/{id}(id=${book.id})}"><button class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button></a>
+                                        <div th:if="${#session.getAttribute('userName')!=null}">
+                                            <a style="margin-right: 6px" th:href="@{/book/viewBook/{id}(id=${book.id})}" th:if="true"><button class="btn btn-success"   >Xem</button></a>
+                                            <a style="margin-right: 6px" th:href="@{/book/initeditBook/{id}(id=${book.id})}" th:if="true"><button class="btn btn-success"   >Sửa</button></a>
+                                            <a th:href="@{/book/delete/{id}(id=${book.id})}"><button class="btn btn-danger" onclick="return confirm('Bạn có chắc chắn muốn xóa?')">Xóa</button></a>
+                                        </div>
                                     </td>
                                 </tr>
                                 </tbody>
                             </table>
-                            <a style="margin-top: 15px" class="btn btn-primary" href="/book/initaddbook">Thêm mới</a>
+                            <div th:if="${#session.getAttribute('userName')!=null}">
+                                <a style="margin-top: 15px" class="btn btn-primary" href="/book/initaddbook">Thêm mới</a>
+                            </div>
                         </div>
 
                     </div>
